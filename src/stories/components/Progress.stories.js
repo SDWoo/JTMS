@@ -10,7 +10,7 @@ export const Default = () => {
   const [value, setValue] = useState(20);
   return (
     <div>
-      <button onClick={() => setValue(100)}>change Values</button>
+      <button onClick={() => setValue(50)}>change Values</button>
       <Progress value={value}></Progress>
     </div>
   );

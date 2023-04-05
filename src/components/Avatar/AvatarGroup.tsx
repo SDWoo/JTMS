@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 
-const AvatarGroup = ({ children, shape = 'circle', size = 70, ...props }) => {
+interface AvatarGroupProps {
+  shape?: 'circle' | 'round' | 'square';
+  size?: number;
+}
+
+const AvatarGroup = ({
+  children,
+  shape = 'circle',
+  size = 70,
+  ...props
+}: PropsWithChildren<AvatarGroupProps>) => {
   const avatars = React.Children.toArray(children)
-    .filter((element) => {
-      if (React.isValidElement(element) && element.props.__TYPE === 'Avatar')
-        return true;
+    .filter((element): element is ReactElement => {
+      if (React.isValidElement(element) && element.props.__TYPE === 'Avatar') return true;
       return false;
     })
     .map((avatar, index, avatars) => {

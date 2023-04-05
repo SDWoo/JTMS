@@ -1,10 +1,28 @@
-import PropTypes from 'prop-types';
+import React, { CSSProperties, ImgHTMLAttributes } from 'react';
 import { useState, useRef, useEffect } from 'react';
 
-let observer = null;
-const LOAD_IMG_EVENT_TYPE = 'loadImge';
+type AllowedAttributeKeys =
+  | 'src'
+  | 'placeholder'
+  | 'alt'
+  | 'width'
+  | 'height'
+  | 'style';
 
-const onIntersection = (entires, io) => {
+export interface ImagePropsType
+  extends Required<
+    Pick<ImgHTMLAttributes<HTMLImageElement>, AllowedAttributeKeys>
+  > {
+  lazy?: boolean;
+  block?: boolean;
+  threshold?: number;
+  mode?: CSSProperties['objectFit'];
+}
+
+let observer: IntersectionObserver | null = null;
+const LOAD_IMG_EVENT_TYPE = 'loadImage';
+
+const onIntersection: IntersectionObserverCallback = (entires, io) => {
   entires.forEach((entry) => {
     if (entry.isIntersecting) {
       io.unobserve(entry.target);
@@ -24,9 +42,9 @@ const Image = ({
   alt,
   mode,
   ...props
-}) => {
+}: ImagePropsType) => {
   const [loaded, setLoaded] = useState(false);
-  const imgRef = useRef(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const imageStyle = {
     display: block ? 'block' : undefined,
     width,
@@ -65,17 +83,6 @@ const Image = ({
       style={{ ...props.style, ...imageStyle }}
     />
   );
-};
-
-Image.propTypes = {
-  lazy: PropTypes.bool,
-  threshold: PropTypes.number,
-  src: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  alt: PropTypes.string,
-  mode: PropTypes.string,
 };
 
 export default Image;

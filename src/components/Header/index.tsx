@@ -1,5 +1,16 @@
 // 동적 태그 이용
-import PropTypes from 'prop-types';
+import { CSSProperties, PropsWithChildren, ReactElement, ReactNode } from 'react';
+
+type HeaderProps = {
+  level: number;
+  strong: boolean;
+  underline: boolean;
+  style: CSSProperties;
+  color: string;
+};
+
+type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
 const Header = ({
   children,
   level = 1,
@@ -7,10 +18,10 @@ const Header = ({
   underline,
   color,
   ...props
-}) => {
-  let Tag = `h${level}`;
+}: PropsWithChildren<HeaderProps>) => {
+  let Tag = `h${level}` as HeadingTag;
   if (level < 1 || level > 6) {
-    console.warn('Header only accept `1~6` as `lelel`');
+    console.warn('Header only accept `1~6` as `label`');
     Tag = 'h1';
   }
 
@@ -24,14 +35,6 @@ const Header = ({
       {children}
     </Tag>
   );
-};
-
-Header.propTypes = {
-  children: PropTypes.node.isRequired,
-  level: PropTypes.number,
-  strong: PropTypes.bool,
-  underline: PropTypes.bool,
-  color: PropTypes.string,
 };
 
 export default Header;
